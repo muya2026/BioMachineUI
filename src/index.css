@@ -1,0 +1,59 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bio-green: #00FF88;
+  --bio-violet: #8B00FF;
+  --bio-cyan: #00FFFF;
+  --bio-dark: #0A0A0F;
+  --bio-darker: #050508;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: var(--bio-darker);
+  color: #ffffff;
+  overflow-x: hidden;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bio-darker);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--bio-violet);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--bio-green);
+}
+
+/* Neon glow effects */
+.neon-text {
+  text-shadow: 0 0 10px var(--bio-green), 0 0 20px var(--bio-green);
+}
+
+.neon-border {
+  box-shadow: 0 0 5px var(--bio-green), 0 0 10px var(--bio-green);
+}
+
+/* Canvas container */
+#bio-canvas-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}

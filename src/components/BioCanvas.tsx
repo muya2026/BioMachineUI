@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect } from 'react';
 import ForceGraph3D from '3d-force-graph';
 import { BioNode, GraphData } from '../utils/compiler';
 import { soundEngine } from '../utils/soundEngine';
@@ -31,46 +31,32 @@ export const BioCanvas: React.FC<BioCanvasProps> = ({
     synapse: '#FF00FF',    // Magenta
   };
 
-  // Handle window resize
-  useEffect(() => {
-    const updateDimensions = () => {
-      if (containerRef.current) {
-        setDimensions({
-          width: containerRef.current.clientWidth,
-          height: containerRef.current.clientHeight,
-        });
-      }
-    };
-
-    updateDimensions();
-    window.addEventListener('resize', updateDimensions);
-    return () => window.removeEventListener('resize', updateDimensions);
-  }, []);
-
   // Initialize and update the force graph
   useEffect(() => {
     if (!containerRef.current || !graphData) return;
 
     // Create or update the graph instance
     if (!fgRef.current) {
-      fgRef.current = ForceGraph3D()(containerRef.current as HTMLElement)
-        .graphData(graphData)
-        .nodeLabel('label')
-        .nodeColor((node: BioNode) => nodeColors[node.type] || '#ffffff')
+      const graphInstance = new ForceGraph3D(containerRef.current as HTMLElement);
+      fgRef.current = graphInstance
+        .graphData(graphData as any)
+        .nodeLabel('label' as any)
+        .nodeColor((node: any) => nodeColors[(node as BioNode).type] || '#ffffff')
         .nodeVal(15)
-        .linkColor(() => '#00FF8840')
+        .linkColor(() => '#00FF8840' as any)
         .linkWidth(2)
         .backgroundColor('transparent')
         .showNavInfo(false)
-        .onNodeClick((node: BioNode) => {
-          onNodeSelect(node);
+        .onNodeClick((node: any) => {
+          onNodeSelect(node as BioNode);
           soundEngine.playHover(1000);
         })
-        .onNodeDragEnd((node: BioNode) => {
+        .onNodeDragEnd((node: any) => {
           // Update node position in graph data
-          node.fx = node.x;
-          node.fy = node.y;
-          node.fz = node.z;
+          const bioNode = node as BioNode;
+          bioNode.fx = bioNode.x;
+          bioNode.fy = bioNode.y;
+          bioNode.fz = bioNode.z;
           onGraphChange(graphData);
         })
         .onBackgroundClick(() => {
@@ -78,14 +64,14 @@ export const BioCanvas: React.FC<BioCanvasProps> = ({
         });
 
       // Add particle impulse animation on links
-      fgRef.current
+      (fgRef.current as any)
         .linkDirectionalParticles(2)
         .linkDirectionalParticleSpeed(0.005)
         .linkDirectionalParticleWidth(3)
         .linkDirectionalParticleColor(() => '#00FF88');
     } else {
       // Update existing graph with new data
-      fgRef.current.graphData(graphData);
+      fgRef.current.graphData(graphData as any);
     }
 
     // Auto-fit view
